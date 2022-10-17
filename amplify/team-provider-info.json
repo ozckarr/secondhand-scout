@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-secondhand-dev-121455-authRole",
+      "UnauthRoleArn": "arn:aws:iam::340637383813:role/amplify-secondhand-dev-121455-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::340637383813:role/amplify-secondhand-dev-121455-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-secondhand-dev-121455-deployment",
+      "UnauthRoleName": "amplify-secondhand-dev-121455-unauthRole",
+      "StackName": "amplify-secondhand-dev-121455",
+      "StackId": "arn:aws:cloudformation:eu-north-1:340637383813:stack/amplify-secondhand-dev-121455/8d466530-4e04-11ed-a9fd-0677aeb46606",
+      "AmplifyAppId": "dlt3ck16960wz"
+    }
+  }
+}
