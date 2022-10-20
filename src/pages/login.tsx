@@ -13,11 +13,10 @@ interface IFormInput {
   password: string;
 }
 
-export default function Login() {
+export default function LogIn() {
   const { user, setUser } = useUser();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-
+  const router = useRouter();
   const [signInError, setSignInError] = useState<string>("");
 
   const {
@@ -27,8 +26,7 @@ export default function Login() {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    const { username, password } = data;
-    const amplifyUser = await Auth.signIn(username, password);
+    const amplifyUser = await Auth.signIn(data.username, data.password);
     if (amplifyUser) {
       router.push("/");
     } else {
@@ -50,62 +48,59 @@ export default function Login() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container direction="column" alignItems="center" spacing={1}>
-        <React.Fragment>
-          <Grid item style={{ marginTop: "1em" }}>
-            <TextField
-              variant="outlined"
-              id="username"
-              name="username"
-              label="Username"
-              type="text"
-              error={errors.username ? true : false}
-              helperText={errors.username ? errors.username.message : null}
-              {...register("username", {
-                required: {
-                  value: true,
-                  message: "Please enter a username.",
-                },
-                minLength: {
-                  value: 3,
-                  message: "Please enter a username between 3-16 characters.",
-                },
-                maxLength: {
-                  value: 16,
-                  message: "Please enter a username between 3-16 characters.",
-                },
-              })}
-            />
-          </Grid>
+        <Grid item style={{ marginTop: "1em" }}>
+          <TextField
+            variant="outlined"
+            id="username"
+            name="username"
+            label="Username"
+            type="text"
+            error={errors.username ? true : false}
+            helperText={errors.username ? errors.username.message : null}
+            {...register("username", {
+              required: {
+                value: true,
+                message: "Please enter a username.",
+              },
+              minLength: {
+                value: 3,
+                message: "Please enter a username between 3-16 characters.",
+              },
+              maxLength: {
+                value: 16,
+                message: "Please enter a username between 3-16 characters.",
+              },
+            })}
+          />
+        </Grid>
 
-          <Grid item>
-            {/*TODO: Add password rules*/}
-            <TextField
-              variant="outlined"
-              id="password"
-              name="password"
-              label="Password"
-              type="password"
-              autoComplete="off"
-              error={errors.password ? true : false}
-              helperText={errors.password ? errors.password.message : null}
-              {...register("password", {
-                required: {
-                  value: true,
-                  message: "Please enter a password.",
-                },
-                minLength: {
-                  value: 8,
-                  message:
-                    "Please enter a password with at least 8 characters.",
-                },
-              })}
-            />
-          </Grid>
-        </React.Fragment>
+        <Grid item>
+          {/*TODO: Add password rules*/}
+          <TextField
+            variant="outlined"
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            autoComplete="off"
+            error={errors.password ? true : false}
+            helperText={errors.password ? errors.password.message : null}
+            {...register("password", {
+              required: {
+                value: true,
+                message: "Please enter a password.",
+              },
+              minLength: {
+                value: 8,
+                message: "Please enter a password with at least 8 characters.",
+              },
+            })}
+          />
+        </Grid>
 
         <Grid item>
           <Button variant="contained" type="submit">
-            Log In
+            Log in
           </Button>
         </Grid>
       </Grid>

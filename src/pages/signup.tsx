@@ -81,7 +81,6 @@ export default function Signup() {
     try {
       await Auth.confirmSignUp(username, code);
       const amplifyUser = await Auth.signIn(username, password);
-      console.log("success", amplifyUser);
       if (amplifyUser) {
         router.push("/");
       } else {
@@ -201,6 +200,13 @@ export default function Signup() {
             {showCode ? "Confirm Code" : "Sign up"}{" "}
           </Button>
         </Grid>
+        {!showCode && (
+          <Grid item style={{ marginTop: "4em" }}>
+            <Button variant="contained" onClick={() => setShowCode(true)}>
+              Confirm Verification Code
+            </Button>
+          </Grid>
+        )}
       </Grid>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
