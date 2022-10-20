@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "secondhand",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authsecondhandc5125abc",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

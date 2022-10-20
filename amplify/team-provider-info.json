@@ -10,6 +10,14 @@
       "StackName": "amplify-secondhand-dev-121455",
       "StackId": "arn:aws:cloudformation:eu-north-1:340637383813:stack/amplify-secondhand-dev-121455/8d466530-4e04-11ed-a9fd-0677aeb46606",
       "AmplifyAppId": "dlt3ck16960wz"
+    },
+    "categories": {
+      "auth": {
+        "secondhandc5125abc": {}
+      },
+      "api": {
+        "secondhand": {}
+      }
     }
   }
 }
