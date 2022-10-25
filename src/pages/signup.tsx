@@ -68,13 +68,11 @@ export default function Signup() {
           email, // optional
         },
       });
-      console.log("Signed up a: ", user);
       return user;
     } catch (error) {
       throw error;
     }
   }
-  console.log("user value: " + user);
 
   async function confirmSignUp(data: IFormInput) {
     const { username, password, code } = data;
