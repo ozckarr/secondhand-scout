@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import { API } from "aws-amplify";
 
 import { useUser } from "../context/AuthContext";
 import { listPosts } from "../graphql/queries";
-import { Post } from "../API";
+import { ListPostsQuery, Post } from "../API";
+import PostPreview from "../components/PostPreview";
 
 export default function Home() {
   const { user } = useUser();
@@ -14,26 +15,32 @@ export default function Home() {
   useEffect(() => {
     const fetchPostFromAPI = async (): Promise<Post[]> => {
       const allPosts = (await API.graphql({ query: listPosts })) as {
-        data: Post[];
+        data: ListPostsQuery;
         error: any[];
       };
 
       if (allPosts.data) {
-        setPosts(allPosts.data);
-        return allPosts.data;
-
-        /* 
-       Dummydata ico emergency
-       setPosts([
+        //setPosts(allPosts.data.listPosts.items as Post[]);
+        //DUMMY DATA
+        setPosts([
           {
             __typename: "Post",
             id: "string",
             title: "string",
             createdAt: "string",
             updatedAt: "string",
-            owner: "1234",
+            owner: "string",
           },
-        ]);*/
+          {
+            __typename: "Post",
+            id: "string",
+            title: "string",
+            createdAt: "string",
+            updatedAt: "string",
+            owner: "string",
+          },
+        ]);
+        return allPosts.data.listPosts.items as Post[];
       } else {
         throw new Error("Couldn't get post");
       }
@@ -43,5 +50,11 @@ export default function Home() {
 
   console.log("User", user);
   console.log("Posts", posts);
-  return <Typography variant="h1">Hello</Typography>;
+  return (
+    <Container maxWidth="md">
+      {posts.map((post) => (
+        <PostPreview key={post.id} post={post} />
+      ))}
+    </Container>
+  );
 }
