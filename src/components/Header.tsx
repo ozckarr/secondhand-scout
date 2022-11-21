@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { useUser } from "../context/AuthContext";
-import AppleIcon from "@material-ui/icons/Apple";
+import FlipCameraAndroidIcon from "@mui/icons-material/FlipCameraAndroid";
 import { Button, Menu, MenuItem } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { Auth } from "aws-amplify";
@@ -32,7 +32,7 @@ export default function Header() {
   };
 
   return (
-    <div style={{ flexGrow: 1 }}>
+    <div style={{ flexGrow: 1, marginBottom: 16 }}>
       <AppBar position="static" color="inherit">
         <Toolbar>
           <IconButton
@@ -42,7 +42,7 @@ export default function Header() {
             aria-label="menu"
             onClick={() => router.push(`/`)}
           >
-            <AppleIcon />
+            <FlipCameraAndroidIcon />
           </IconButton>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
             Reddit Clone

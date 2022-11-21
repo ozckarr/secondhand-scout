@@ -1,7 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button, Grid, Snackbar, TextField } from "@material-ui/core";
 import { Auth } from "aws-amplify";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React, { useState } from "react";
 import Alert from "@mui/material/Alert";
 import { useUser } from "../context/AuthContext";
@@ -90,7 +89,7 @@ export default function Signup() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
       <Grid container direction="column" alignItems="center" spacing={1}>
         {!showCode && (
           <React.Fragment>
