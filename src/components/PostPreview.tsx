@@ -6,13 +6,14 @@ import {
   Paper,
   Typography,
 } from "@material-ui/core";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { Post } from "../API";
 import Image from "next/image";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { useRouter } from "next/router";
 import formatDatePosted from "../lib/formatDatePosted";
+import { Storage } from "aws-amplify";
 
 interface Props {
   post: Post;
@@ -20,6 +21,22 @@ interface Props {
 
 export default function PostPreview({ post }: Props): ReactElement {
   const router = useRouter();
+  const [postImage, setPostImage] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    async function getImageFromStorage() {
+      try {
+        const signedURL = await Storage.get(post.image); // get key from Storage.list
+        console.log("Found Image:", signedURL);
+        // @ts-ignore
+        setPostImage(signedURL);
+      } catch (error) {
+        console.log("No image found.");
+      }
+    }
+
+    getImageFromStorage();
+  }, []);
 
   return (
     <Paper elevation={3}>
@@ -83,12 +100,12 @@ export default function PostPreview({ post }: Props): ReactElement {
               >
                 <Typography variant="body1">{post.contents}</Typography>
               </Grid>
-              {post.image && (
+              {postImage && postImage && (
                 <Grid item>
                   <Image
-                    src={`https://source.unsplash.com/random/980x540`}
-                    width={980}
+                    src={postImage}
                     height={540}
+                    width={980}
                     layout="intrinsic"
                   />
                 </Grid>

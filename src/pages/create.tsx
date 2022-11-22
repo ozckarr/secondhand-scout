@@ -42,7 +42,7 @@ export default function Create({}: Props): ReactElement {
         const imagePath = uuidv4();
 
         await Storage.put(imagePath, file, {
-          //contentType: "image/png", // contentType is optional
+          contentType: file.type, // contentType is optional
         });
 
         // Once the upload is uploaded...
@@ -65,6 +65,22 @@ export default function Create({}: Props): ReactElement {
       } catch (error) {
         error.log("Error uploading file: ", error);
       }
+    } else {
+      // Once the upload is uploaded...
+      const createNewPostWithoutImageInput: CreatePostInput = {
+        title: data.title,
+        contents: data.content,
+        upvotes: 0,
+        downvotes: 0,
+      };
+
+      const createNewPostWithoutImage = (await API.graphql({
+        query: createPost,
+        variables: { input: createNewPostWithoutImageInput },
+        authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+      })) as { data: CreatePostMutation };
+
+      router.push(`/post/${createNewPostWithoutImage.data.createPost.id}`);
     }
 
     // Send a request to upload to S3 bucket
