@@ -27,7 +27,6 @@ export default function ImageDropzone({ file, setFile }: Props) {
             borderStyle: "dashed",
             borderWidth: 1,
             borderColor: "rgba(255,255,255,0.5)",
-            minHeight: 128,
           }}
         >
           <div
@@ -35,7 +34,7 @@ export default function ImageDropzone({ file, setFile }: Props) {
             style={{ padding: 16 }}
           >
             <input {...getInputProps()} />
-            <Typography variant="body1">
+            <Typography variant="body1" align="center">
               Drag and drop the image you want to upload for your post.
             </Typography>
           </div>

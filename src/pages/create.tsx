@@ -1,21 +1,30 @@
 import React, { ReactElement, useState } from "react";
+import { API, Storage } from "aws-amplify";
+import { v4 as uuidv4 } from "uuid";
 
 import { Button, Container, Grid, TextField } from "@material-ui/core";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Image from "next/image";
-import ImageDropzone from "../components/ImageDropZone";
+import ImageDropzone from "../components/ImageDropzone";
+import {
+  CreatePostInput,
+  CreatePostMutation,
+  CreatePostMutationVariables,
+} from "../API";
+import { createPost } from "../graphql/mutations";
+import router from "next/router";
+import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api";
 
 interface IFormInput {
   title: string;
   content: string;
-  image?: string;
+  // image?: string;
 }
 
 interface Props {}
 
 export default function Create({}: Props): ReactElement {
   const [file, setFile] = useState<File>();
-  console.log(file);
 
   const {
     register,
@@ -24,7 +33,41 @@ export default function Create({}: Props): ReactElement {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    console.log(file);
     console.log(data);
+
+    if (file) {
+      // user uploaded
+      try {
+        const imagePath = uuidv4();
+
+        await Storage.put(imagePath, file, {
+          //contentType: "image/png", // contentType is optional
+        });
+
+        // Once the upload is uploaded...
+        const createNewPostInput: CreatePostInput = {
+          title: data.title,
+          contents: data.content,
+          image: imagePath,
+          upvotes: 0,
+          downvotes: 0,
+        };
+
+        const createNewPost = (await API.graphql({
+          query: createPost,
+          variables: { input: createNewPostInput },
+          authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+        })) as { data: CreatePostMutation };
+
+        console.log("new post created succefully", createNewPost);
+        router.push(`/post/${createNewPost.data.createPost.id}`);
+      } catch (error) {
+        error.log("Error uploading file: ", error);
+      }
+    }
+
+    // Send a request to upload to S3 bucket
   };
 
   return (
@@ -86,7 +129,7 @@ export default function Create({}: Props): ReactElement {
           </Grid>
           {/* Submit */}
           <Grid item>
-            <Button variant="contained" fullWidth>
+            <Button variant="contained" type="submit" fullWidth>
               Create Post
             </Button>
           </Grid>

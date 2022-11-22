@@ -20,34 +20,8 @@ export default function Home() {
       };
 
       if (allPosts.data) {
-        //setPosts(allPosts.data.listPosts.items as Post[]);
-        //DUMMY DATA
-        setPosts([
-          {
-            __typename: "Post",
-            id: "string1",
-            title: "string",
-            contents: "string",
-            image: "string | null",
-            upvotes: 1,
-            downvotes: 2,
-            createdAt: "2022-02-26T16:37:48.244Z",
-            updatedAt: "2022-02-26T16:37:48.244Z",
-            owner: "string | null",
-          },
-          {
-            __typename: "Post",
-            id: "string2",
-            title: "string",
-            contents: "string",
-            image: "string | null",
-            upvotes: 1,
-            downvotes: 2,
-            createdAt: "2022-02-26T16:37:48.244Z",
-            updatedAt: "2022-02-26T16:37:48.244Z",
-            owner: "string | null",
-          },
-        ]);
+        setPosts(allPosts.data.listPosts.items as Post[]);
+
         return allPosts.data.listPosts.items as Post[];
       } else {
         throw new Error("Couldn't get post");

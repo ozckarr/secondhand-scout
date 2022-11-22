@@ -17,6 +17,9 @@
       },
       "api": {
         "secondhand": {}
+      },
+      "storage": {
+        "secondHandImages": {}
       }
     }
   }

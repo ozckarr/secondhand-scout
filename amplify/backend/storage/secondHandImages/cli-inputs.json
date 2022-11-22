@@ -1,0 +1,16 @@
+{
+  "resourceName": "secondHandImages",
+  "policyUUID": "bb2cd7c6",
+  "bucketName": "secondhandbf0c437593e84429a8e852933ca5597e",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
