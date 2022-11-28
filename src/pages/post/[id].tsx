@@ -1,24 +1,105 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 
+import { useForm, SubmitHandler } from "react-hook-form";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { withSSRContext } from "aws-amplify";
+import { API, withSSRContext } from "aws-amplify";
 import { listPosts, getPost } from "../../graphql/queries";
-import { GetPostQuery, ListPostsQuery, Post, Comment } from "../../API";
+import {
+  ListPostsQuery,
+  GetPostQuery,
+  Post,
+  CreateCommentInput,
+  CreateCommentMutation,
+  Comment,
+} from "../../API";
 import PostPreview from "../../components/PostPreview";
-import { Container } from "@material-ui/core";
+import { Button, Container, Grid, TextField } from "@material-ui/core";
 import PostComment from "../../components/PostComment";
+import { createComment } from "../../graphql/mutations";
+import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api";
+
+interface IFormInput {
+  comment: string;
+}
 
 interface Props {
   post: Post;
 }
 
 export default function IndividualPost({ post }: Props): ReactElement {
+  const [comments, setComments] = useState<Comment[]>(
+    post.comments.items as Comment[]
+  );
+
+  const {
+    register,
+    reset,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<IFormInput>();
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    console.log(data);
+
+    const newCommentInput: CreateCommentInput = {
+      postCommentsId: post.id,
+      content: data.comment,
+    };
+    const createNewComment = (await API.graphql({
+      query: createComment,
+      variables: { input: newCommentInput },
+      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+    })) as { data: CreateCommentMutation };
+    reset();
+    setComments([...comments, createNewComment.data.createComment as Comment]);
+  };
+
   return (
     <Container maxWidth="md">
       <PostPreview post={post} />
-      {post.comments.items.map((comment) => (
-        <PostComment key={comment.id} comment={comment} />
-      ))}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
+        style={{ marginTop: 32, marginBottom: 64 }}
+      >
+        <Grid container spacing={2} direction="row" alignItems="center">
+          <Grid item style={{ flexGrow: 1 }}>
+            <TextField
+              fullWidth
+              multiline
+              style={{ width: "100%" }}
+              variant="outlined"
+              id="comment"
+              name="comment"
+              label="Add a Comment"
+              type="text"
+              error={errors.comment ? true : false}
+              helperText={errors.comment ? errors.comment.message : null}
+              {...register("comment", {
+                required: {
+                  value: true,
+                  message: "Please enter a username.",
+                },
+                maxLength: {
+                  value: 240,
+                  message: "Maximum of characters reached.",
+                },
+              })}
+            />
+          </Grid>
+          <Grid item>
+            <Button fullWidth variant="contained" color="default" type="submit">
+              Add Comment
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+
+      {comments
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+        .map((comment) => (
+          <PostComment key={comment.id} comment={comment} />
+        ))}
     </Container>
   );
 }
