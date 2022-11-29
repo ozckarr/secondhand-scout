@@ -50,8 +50,6 @@ export default function Create({}: Props): ReactElement {
           title: data.title,
           contents: data.content,
           image: imagePath,
-          upvotes: 0,
-          downvotes: 0,
         };
 
         const createNewPost = (await API.graphql({
@@ -70,8 +68,6 @@ export default function Create({}: Props): ReactElement {
       const createNewPostWithoutImageInput: CreatePostInput = {
         title: data.title,
         contents: data.content,
-        upvotes: 0,
-        downvotes: 0,
       };
 
       const createNewPostWithoutImage = (await API.graphql({

@@ -11,8 +11,17 @@ export const getPost = /* GraphQL */ `
       image
       votes {
         items {
-          vote
           id
+          vote
+          post {
+            id
+            title
+            contents
+            image
+            createdAt
+            updatedAt
+            owner
+          }
           createdAt
           updatedAt
           postVotesId
@@ -23,6 +32,15 @@ export const getPost = /* GraphQL */ `
       comments {
         items {
           id
+          post {
+            id
+            title
+            contents
+            image
+            createdAt
+            updatedAt
+            owner
+          }
           content
           createdAt
           updatedAt
@@ -50,9 +68,25 @@ export const listPosts = /* GraphQL */ `
         contents
         image
         votes {
+          items {
+            id
+            vote
+            createdAt
+            updatedAt
+            postVotesId
+            owner
+          }
           nextToken
         }
         comments {
+          items {
+            id
+            content
+            createdAt
+            updatedAt
+            postCommentsId
+            owner
+          }
           nextToken
         }
         createdAt
@@ -73,9 +107,25 @@ export const getComment = /* GraphQL */ `
         contents
         image
         votes {
+          items {
+            id
+            vote
+            createdAt
+            updatedAt
+            postVotesId
+            owner
+          }
           nextToken
         }
         comments {
+          items {
+            id
+            content
+            createdAt
+            updatedAt
+            postCommentsId
+            owner
+          }
           nextToken
         }
         createdAt
@@ -104,6 +154,12 @@ export const listComments = /* GraphQL */ `
           title
           contents
           image
+          votes {
+            nextToken
+          }
+          comments {
+            nextToken
+          }
           createdAt
           updatedAt
           owner
@@ -121,6 +177,7 @@ export const listComments = /* GraphQL */ `
 export const getVote = /* GraphQL */ `
   query GetVote($id: ID!) {
     getVote(id: $id) {
+      id
       vote
       post {
         id
@@ -128,16 +185,31 @@ export const getVote = /* GraphQL */ `
         contents
         image
         votes {
+          items {
+            id
+            vote
+            createdAt
+            updatedAt
+            postVotesId
+            owner
+          }
           nextToken
         }
         comments {
+          items {
+            id
+            content
+            createdAt
+            updatedAt
+            postCommentsId
+            owner
+          }
           nextToken
         }
         createdAt
         updatedAt
         owner
       }
-      id
       createdAt
       updatedAt
       postVotesId
@@ -153,17 +225,23 @@ export const listVotes = /* GraphQL */ `
   ) {
     listVotes(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        id
         vote
         post {
           id
           title
           contents
           image
+          votes {
+            nextToken
+          }
+          comments {
+            nextToken
+          }
           createdAt
           updatedAt
           owner
         }
-        id
         createdAt
         updatedAt
         postVotesId

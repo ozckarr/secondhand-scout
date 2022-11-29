@@ -50,6 +50,7 @@ type Vote
     ]
   ) {
   #True = upvote, false = downvote
+  id: ID!
   vote: String!
   post: Post @belongsTo
 }

@@ -28,7 +28,7 @@ interface Props {
 
 export default function IndividualPost({ post }: Props): ReactElement {
   const [comments, setComments] = useState<Comment[]>(
-    post.comments.items as Comment[]
+    post?.comments.items as Comment[]
   );
 
   const {
@@ -95,11 +95,10 @@ export default function IndividualPost({ post }: Props): ReactElement {
         </Grid>
       </form>
 
-      {comments
-        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-        .map((comment) => (
-          <PostComment key={comment.id} comment={comment} />
-        ))}
+      {comments &&
+        comments
+          .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+          .map((comment) => <PostComment key={comment.id} comment={comment} />)}
     </Container>
   );
 }
